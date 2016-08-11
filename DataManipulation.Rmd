@@ -2,7 +2,7 @@
 title: "DataManipulation"
 author: "Dan Murphy"
 date: "August 10, 2016"
-output: html_document
+output: github_document
 ---
 
 This file shows the manipulations made to the dataset to prepare for analysis.  The dataset was provided show truck dispatch times.  Its format needed to be changed and truck dispatch times were converted to show earliest dispatch time for each fire station.  
