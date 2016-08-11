@@ -34,64 +34,64 @@ In the next dataframe, the longitude and latitude of each location is acquired. 
 
 ```{r}
   LocationsDF <- cbind(MapData, geocode(MapData2$Location))
-  LocationsDF.Alarms$MainOrigin <- "REDACTED - Main Location"
-  LocationsDF.Alarms$Sta2Origin <- "REDACTED - Station 2 Location"
-  LocationsDF.Alarms$Sta3Origin <- "REDACTED - Station 3 Location"
-  LocationsDF.Alarms$Sta4Origin <- "REDACTED - New Station Location"
+  LocationsDF$MainOrigin <- "REDACTED - Main Location"
+  LocationsDF$Sta2Origin <- "REDACTED - Station 2 Location"
+  LocationsDF$Sta3Origin <- "REDACTED - Station 3 Location"
+  LocationsDF$Sta4Origin <- "REDACTED - New Station Location"
 ```
 
 The for loop executes the ggmaps mapdist function between each alarm location and fire station.  It then apends the travel time in seconds to the data frame.    
 
 ```{r}
-   for (i in 1:dim(LocationsDF.Alarms)[1]){  
-      df <- mapdist(LocationsDF.Alarms$MainOrigin[i],
-                    LocationsDF.Alarms$Location[i])
+   for (i in 1:dim(LocationsDF)[1]){  
+      df <- mapdist(LocationsDF$MainOrigin[i],
+                    LocationsDF$Location[i])
       returnDF <- rbind(returnDF, c(df$to, df$seconds))
    }    
   
     returnDF <- as.data.frame(returnDF)
     colnames(returnDF) <- c("Destination", "seconds")
-    LocationsDF.Alarms <- cbind(LocationsDF.Alarms, returnDF$seconds)
-    colnames(LocationsDF.Alarms)[9] <- "SecondsFromMain"
+    LocationsDF <- cbind(LocationsDF, returnDF$seconds)
+    colnames(LocationsDF)[9] <- "SecondsFromMain"
 
     returnDF <- NULL
 
-   for (i in 1:dim(LocationsDF.Alarms)[1]){  
-      df <- mapdist(LocationsDF.Alarms$Sta2Origin[i],
-                    LocationsDF.Alarms$Location[i])
+   for (i in 1:dim(LocationsDF)[1]){  
+      df <- mapdist(LocationsDF$Sta2Origin[i],
+                    LocationsDF$Location[i])
       returnDF <- rbind(returnDF, c(df$to, df$seconds))
    }    
   
     returnDF <- as.data.frame(returnDF)
     colnames(returnDF) <- c("Destination", "seconds")
-    LocationsDF.Alarms <- cbind(LocationsDF.Alarms, returnDF$seconds)
-    colnames(LocationsDF.Alarms)[10] <- "SecondsFromSta2"
+    LocationsDF <- cbind(LocationsDF, returnDF$seconds)
+    colnames(LocationsDF)[10] <- "SecondsFromSta2"
 
     returnDF <- NULL
 
-   for (i in 1:dim(LocationsDF.Alarms)[1]){  
-      df <- mapdist(LocationsDF.Alarms$Sta3Origin[i],
-                    LocationsDF.Alarms$Location[i])
+   for (i in 1:dim(LocationsDF)[1]){  
+      df <- mapdist(LocationsDF$Sta3Origin[i],
+                    LocationsDF$Location[i])
       returnDF <- rbind(returnDF, c(df$to, df$seconds))
    }    
   
     returnDF <- as.data.frame(returnDF)
     colnames(returnDF) <- c("Destination", "seconds")
-    LocationsDF.Alarms <- cbind(LocationsDF.Alarms, returnDF$seconds)
-    colnames(LocationsDF.Alarms)[11] <- "SecondsFromSta3"
+    LocationsDF <- cbind(LocationsDF, returnDF$seconds)
+    colnames(LocationsDF)[11] <- "SecondsFromSta3"
 
     returnDF <- NULL
     
-   for (i in 1:dim(LocationsDF.Alarms)[1]){  
-      df <- mapdist(LocationsDF.Alarms$Sta4Origin[i],
-                    LocationsDF.Alarms$Location[i])
+   for (i in 1:dim(LocationsDF)[1]){  
+      df <- mapdist(LocationsDF$Sta4Origin[i],
+                    LocationsDF$Location[i])
       returnDF <- rbind(returnDF, c(df$to, df$seconds))
    }    
   
     returnDF <- as.data.frame(returnDF)
     colnames(returnDF) <- c("Destination", "seconds")
-    LocationsDF.Alarms <- cbind(LocationsDF.Alarms, returnDF$seconds)
-    colnames(LocationsDF.Alarms)[12] <- "SecondsFromSta4"
+    LocationsDF <- cbind(LocationsDF, returnDF$seconds)
+    colnames(LocationsDF)[12] <- "SecondsFromSta4"
 
     returnDF <- NULL
     
