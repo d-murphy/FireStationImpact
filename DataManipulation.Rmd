@@ -5,7 +5,62 @@ date: "August 10, 2016"
 output: html_document
 ---
 
-```{r}
+This file shows the manipulations made to the dataset to prepare for analysis.  The dataset was provided show truck dispatch times.  Its format needed to be changed and truck dispatch times were converted to show earliest dispatch time for each fire station.  
+
+```{r, eval= FALSE, warning=FALSE}
 library(dplyr)
 library(tidyr)
+library(ggplot2)
+library(readxl)
+library(lubridate)
+```
+
+Here, the dataset was loaded, the day of the week is identified and factored, and the dataset converted to long form by performing the gather function twice and joining the resulting data sets.  
+
+```{r, eval=FALSE, warning=FALSE}
+FullTruck <- read_excel("C:/Users/murph/Desktop/FullResponseData1Q2015.xlsx")
+FullTruck$Day <- as.factor(wday(FullTruck$Date, label = TRUE))
+
+FullTruck.longprep <- gather(FullTruck, Sig21Unit, Signal21Times, E1S21,E2S21,E3S21,
+                             E4S21,T5S21,T6S21,E7S21, E8S21,E9S21,T15S21)
+FullTruck.longprep$ID <- paste(FullTruck.longprep$RunNumber,
+                               substr(FullTruck.longprep$Sig21Unit,1,2), sep=":")
+
+FullTruck.longprep2 <- gather(FullTruck, Sig2Unit, Signal2Times, E1S2,E2S2,E3S2,E4S2,
+                              T5S2,T6S2,E7S2, E8S2,E9S2,T15S2)
+FullTruck.longprep2$ID <- paste(FullTruck.longprep2$RunNumber,
+                                substr(FullTruck.longprep2$Sig2Unit,1,2), sep=":")
+
+JoinDF <- data_frame(FullTruck.longprep2$ID, FullTruck.longprep2$Sig2Unit, FullTruck.longprep2$Signal2Times)
+colnames(JoinDF) <- c("ID","Sig2Unit","Signal2Times")
+
+FullTruck.Long <- inner_join(x = FullTruck.longprep, y = JoinDF, by = "ID", all = TRUE)
+FullTruck.Long <- data.frame(FullTruck.Long[1:7],FullTruck.Long[18:23])
+remove(FullTruck,FullTruck.longprep,FullTruck.longprep2,JoinDF)
+```
+
+Each of the current fire stations host multiple fire engines.  For the study, fire departure from each fire station was needed rather than times of individual engines.  Here, fire engine markers are used to identify the fire station from which it departed and then the earliest engine from each fire station is then identified.
+
+
+```{r, eval=FALSE}
+    FirstMainSig2 <- FullTruck.Long %>% 
+      filter(Sig2Unit=="E1S2" | Sig2Unit=="E3S2" | Sig2Unit=="T6S2" | Sig2Unit=="E7S2" ) %>%
+      group_by(RunNumber) %>% 
+      mutate(FirstSig2Time = min_rank(Signal2Times)) %>% 
+      filter(FirstSig2Time == 1)
+      
+    FirstSta2Sig2 <- FullTruck.Long %>% 
+      filter(Sig2Unit=="E2S2" | Sig2Unit=="T5S2" | Sig2Unit=="T15S2" | Sig2Unit=="E9S2" ) %>%
+      group_by(RunNumber) %>% 
+      mutate(FirstSig2Time = min_rank(Signal2Times)) %>% 
+      filter(FirstSig2Time == 1)
+    
+    FirstSta3Sig2 <- FullTruck.Long %>% 
+      filter(Sig2Unit=="E4S2" | Sig2Unit=="E8S2" ) %>%
+      group_by(RunNumber) %>% 
+      mutate(FirstSig2Time = min_rank(Signal2Times)) %>% 
+      filter(FirstSig2Time == 1)
+    
+    StationFirstSig2.Long <-  rbind(FirstMainSig2, FirstSta2Sig2, FirstSta3Sig2)
+    remove(FirstMainSig2,FirstSta2Sig2,FirstSta3Sig2)
 ```
