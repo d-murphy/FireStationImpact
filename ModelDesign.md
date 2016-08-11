@@ -12,7 +12,12 @@ library(lubridate)
 load(file="StationFirstSig2Long.RData")
 ```
 
+Overview of Model
+-----------------
+
 The simulation model featured two random variables. The first random variable determines when a fire engine leaves the station. A second determines how quickly the engine travels to the alarm.
+
+### Fire Engine Departures
 
 The fire department is staffed by volunteers who are not always present at the fire station. This results in a bimodal distribution of fire engine departures with a first bump where members are already present in the station and a second when members need to respond to the station.
 
@@ -61,3 +66,7 @@ ggplot(StationFirstSig2.Long, aes(x=Signal2Times)) +
 ```
 
 ![](ModelDesign_files/figure-markdown_github/unnamed-chunk-5-1.png)<!-- -->
+
+### Adjustment to Travel Times
+
+Travel estimates are provided by the Google Maps API. The graph below shows how observed travel times were on average smaller than the Google Maps estimates. In the model, the alarms from 2015 will be simulated using the Google Maps estimates and adjusting that time by sampling from the normal distribution shown below.
