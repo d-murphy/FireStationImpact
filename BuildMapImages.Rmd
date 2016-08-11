@@ -2,7 +2,7 @@
 title: "BuildMapImages"
 author: "Dan Murphy"
 date: "August 11, 2016"
-output: html_document
+output: github_document
 ---
 
 The goal of the maps shown below is to indicate how the  minimum travel time for a fire engine will change after construction of a new fire station.  

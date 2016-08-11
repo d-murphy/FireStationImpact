@@ -25,37 +25,29 @@ LocationsDF <- LocationsDF %>% rowwise() %>% mutate(MinTravelw4FireStations =
                                                         SecondsFromSta3,SecondsFromSta4))
 ```
 
-``` r
-CI_Map <- qmap("Central Islip, New York", zoom=14, color="bw", legend="topleft")
-```
-
-    ## Map from URL : http://maps.googleapis.com/maps/api/staticmap?center=Central+Islip,+New+York&zoom=14&size=640x640&scale=2&maptype=terrain&language=en-EN&sensor=false
-
-    ## Information from URL : http://maps.googleapis.com/maps/api/geocode/json?address=Central%20Islip,%20New%20York&sensor=false
+Then, using the ggmap package, qmap pulls the locations image. With ggplot, locations of alarms are overlayed, which were identified in the GoogleMapsTravelEstimates script with the geocode function
 
 ``` r
+CI_Map <- qmap("Central Islip, New York", zoom=13, color="bw", legend="topleft")
+
 MapLocationsDF.Alarms <- LocationsDF %>% filter(MinTravelExistingFireStations<500)
 
 CI_Map + geom_point(aes(x=lon, y=lat, colour=MinTravelExistingFireStations,size=2), 
                     data=MapLocationsDF.Alarms) + 
-                    theme(legend.position=c(.15,.35)) + 
+                    theme(legend.position=c(0,1)) + 
                     labs(colour = "Min Travel Time\nExisting Fire Stations\n(Seconds)") + 
                     guides(size=FALSE)
 ```
-
-    ## Warning: Removed 189 rows containing missing values (geom_point).
 
 ![](BuildMapImages_files/figure-markdown_github/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 CI_Map + geom_point(aes(x=lon, y=lat, colour=MinTravelw4FireStations, size=2), 
                     data=MapLocationsDF.Alarms) + 
-                    theme(legend.position=c(.15,.35)) + 
+                    theme(legend.position=c(0,1)) + 
                     labs(colour = "Min Travel Time\nWith 4 Fire Stations\n(Seconds)") + 
                     guides(size=FALSE)
 ```
-
-    ## Warning: Removed 189 rows containing missing values (geom_point).
 
 ![](BuildMapImages_files/figure-markdown_github/unnamed-chunk-4-2.png)<!-- -->
 
@@ -67,11 +59,9 @@ MapLocationsDF.Alarms$MinTravelChange <- MapLocationsDF.Alarms$MinTravelExisting
 
 CI_Map + geom_point(aes(x=lon, y=lat, colour=MinTravelChange,size=2), 
                     data=MapLocationsDF.Alarms) + 
-                    theme(legend.position=c(.15,.35)) + 
+                    theme(legend.position=c(0,1)) + 
                     labs(colour = "Min Travel Time Change\nWith New Fire Station\n(Seconds)") +     
                     guides(size=FALSE)
 ```
-
-    ## Warning: Removed 189 rows containing missing values (geom_point).
 
 ![](BuildMapImages_files/figure-markdown_github/unnamed-chunk-5-1.png)<!-- -->
