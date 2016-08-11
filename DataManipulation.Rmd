@@ -1,0 +1,10 @@
+---
+title: "DataManipulation"
+author: "Dan Murphy"
+date: "August 10, 2016"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+```
