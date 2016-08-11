@@ -62,5 +62,20 @@ Each of the current fire stations host multiple fire engines.  For the study, fi
       filter(FirstSig2Time == 1)
     
     StationFirstSig2.Long <-  rbind(FirstMainSig2, FirstSta2Sig2, FirstSta3Sig2)
+    StationFirstSig2.Long <- ungroup(StationFirstSig2.Long)
     remove(FirstMainSig2,FirstSta2Sig2,FirstSta3Sig2)
+
+    StationFirstSig2.Long$Station <- ifelse(StationFirstSig2.Long$Sig2Unit == "E1S2" | 
+                                            StationFirstSig2.Long$Sig2Unit == "E3S2" |
+                                            StationFirstSig2.Long$Sig2Unit == "E7S2" | 
+                                            StationFirstSig2.Long$Sig2Unit == "T6S2",
+                                              "Main",
+                                        ifelse(StationFirstSig2.Long$Sig2Unit == "E2S2" | 
+                                               StationFirstSig2.Long$Sig2Unit == "E8S2" | 
+                                               StationFirstSig2.Long$Sig2Unit == "T5S2",
+                                              "Sta2","Sta3")) 
+
+    StationFirstSig2.Long$Station <- as.factor(StationFirstSig2.Long$Station)
+    StationFirstSig2.Long$Hour <- hour(StationFirstSig2.Long$Time)
+
 ```
