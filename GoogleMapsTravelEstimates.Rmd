@@ -1,0 +1,98 @@
+---
+title: "GoogleMapsTravelEstimates"
+author: "Dan Murphy"
+date: "August 11, 2016"
+output: github_document
+---
+
+The Google Maps API provides an accurate method of determining how quickly fire engines can travel to alarm locations from the new fire station.  Using the alarm locations from 2015, the travel times from all 4 fire stations were pulled from the Maps API.  
+
+```{r, message=FALSE,warning=FALSE}
+library(ggmap)
+library(readxl)
+```
+
+Here, the 2015 alarm addresses are loaded along with the locations of the existing and planned fire stations and a column indicating what the address indicates.  
+
+```{r, eval=FALSE}
+  Alarms <- read_excel("C:/Users/murph/Desktop/IncidentListForImport2.xlsx")
+  MapData <- as.data.frame(Alarms$Location)
+  MapData$LocationType <- "Alarm"
+
+  StationLocationData <- as.data.frame(c("REDACTED - Main Location", 
+                                         "REDACTED - Station 2 Location", "REDACTED - Station 3 Location"))
+  StationLocationData$LocationType <- "Existing Fire Station"
+
+  NewStationLocationData <- as.data.frame("REDACTED - New Station Location")
+  NewStationLocationData$LocationType <- "New Fire Station"
+
+  MapData <- rbind(MapData, StationLocationData, NewStationLocationData)
+  remove(StationLocationData,NewStationLocationData)
+```
+
+In the next dataframe, the longitude and latitude of each location is acquired.  Additional columns are created to hold the addresses of each fire station.  
+
+```{r}
+  LocationsDF <- cbind(MapData, geocode(MapData2$Location))
+  LocationsDF.Alarms$MainOrigin <- "REDACTED - Main Location"
+  LocationsDF.Alarms$Sta2Origin <- "REDACTED - Station 2 Location"
+  LocationsDF.Alarms$Sta3Origin <- "REDACTED - Station 3 Location"
+  LocationsDF.Alarms$Sta4Origin <- "REDACTED - New Station Location"
+```
+
+The for loop executes the ggmaps mapdist function between each alarm location and fire station.  It then apends the travel time in seconds to the data frame.    
+
+```{r}
+   for (i in 1:dim(LocationsDF.Alarms)[1]){  
+      df <- mapdist(LocationsDF.Alarms$MainOrigin[i],
+                    LocationsDF.Alarms$Location[i])
+      returnDF <- rbind(returnDF, c(df$to, df$seconds))
+   }    
+  
+    returnDF <- as.data.frame(returnDF)
+    colnames(returnDF) <- c("Destination", "seconds")
+    LocationsDF.Alarms <- cbind(LocationsDF.Alarms, returnDF$seconds)
+    colnames(LocationsDF.Alarms)[9] <- "SecondsFromMain"
+
+    returnDF <- NULL
+
+   for (i in 1:dim(LocationsDF.Alarms)[1]){  
+      df <- mapdist(LocationsDF.Alarms$Sta2Origin[i],
+                    LocationsDF.Alarms$Location[i])
+      returnDF <- rbind(returnDF, c(df$to, df$seconds))
+   }    
+  
+    returnDF <- as.data.frame(returnDF)
+    colnames(returnDF) <- c("Destination", "seconds")
+    LocationsDF.Alarms <- cbind(LocationsDF.Alarms, returnDF$seconds)
+    colnames(LocationsDF.Alarms)[10] <- "SecondsFromSta2"
+
+    returnDF <- NULL
+
+   for (i in 1:dim(LocationsDF.Alarms)[1]){  
+      df <- mapdist(LocationsDF.Alarms$Sta3Origin[i],
+                    LocationsDF.Alarms$Location[i])
+      returnDF <- rbind(returnDF, c(df$to, df$seconds))
+   }    
+  
+    returnDF <- as.data.frame(returnDF)
+    colnames(returnDF) <- c("Destination", "seconds")
+    LocationsDF.Alarms <- cbind(LocationsDF.Alarms, returnDF$seconds)
+    colnames(LocationsDF.Alarms)[11] <- "SecondsFromSta3"
+
+    returnDF <- NULL
+    
+   for (i in 1:dim(LocationsDF.Alarms)[1]){  
+      df <- mapdist(LocationsDF.Alarms$Sta4Origin[i],
+                    LocationsDF.Alarms$Location[i])
+      returnDF <- rbind(returnDF, c(df$to, df$seconds))
+   }    
+  
+    returnDF <- as.data.frame(returnDF)
+    colnames(returnDF) <- c("Destination", "seconds")
+    LocationsDF.Alarms <- cbind(LocationsDF.Alarms, returnDF$seconds)
+    colnames(LocationsDF.Alarms)[12] <- "SecondsFromSta4"
+
+    returnDF <- NULL
+    
+    

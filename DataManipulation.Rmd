@@ -77,5 +77,4 @@ Each of the current fire stations host multiple fire engines.  For the study, fi
 
     StationFirstSig2.Long$Station <- as.factor(StationFirstSig2.Long$Station)
     StationFirstSig2.Long$Hour <- hour(StationFirstSig2.Long$Time)
-
 ```
