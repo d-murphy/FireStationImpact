@@ -25,7 +25,7 @@ LocationsDF <- LocationsDF %>% rowwise() %>% mutate(MinTravelw4FireStations =
                                                         SecondsFromSta3,SecondsFromSta4))
 ```
 
-Then, using the ggmap package, qmap pulls the locations image. With ggplot, locations of alarms are overlayed, which were identified in the GoogleMapsTravelEstimates script with the geocode function
+Then, using the ggmap package, the qmap function pulls a black and white map of the area. With ggplot, locations of alarms are overlayed using longitude and latitude, which were identified in the GoogleMapsTravelEstimates script with the geocode function.
 
 ``` r
 CI_Map <- qmap("Central Islip, New York", zoom=13, color="bw", legend="topleft")

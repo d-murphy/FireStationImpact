@@ -41,7 +41,7 @@ LocationsDF &lt;-<span class="st"> </span>LocationsDF %&gt;%<span class="st"> </
 LocationsDF &lt;-<span class="st"> </span>LocationsDF %&gt;%<span class="st"> </span><span class="kw">rowwise</span>() %&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">MinTravelw4FireStations =</span> 
                                                     <span class="kw">min</span>(SecondsFromMain,SecondsFromSta2,
                                                         SecondsFromSta3,SecondsFromSta4))</code></pre>
-<p>Then, using the ggmap package, qmap pulls the locations image. With ggplot, locations of alarms are overlayed, which were identified in the GoogleMapsTravelEstimates script with the geocode function</p>
+<p>Then, using the ggmap package, the qmap function pulls a black and white map of the area. With ggplot, locations of alarms are overlayed using longitude and latitude, which were identified in the GoogleMapsTravelEstimates script with the geocode function.</p>
 <pre class="sourceCode r"><code class="sourceCode r">CI_Map &lt;-<span class="st"> </span><span class="kw">qmap</span>(<span class="st">&quot;Central Islip, New York&quot;</span>, <span class="dt">zoom=</span><span class="dv">13</span>, <span class="dt">color=</span><span class="st">&quot;bw&quot;</span>, <span class="dt">legend=</span><span class="st">&quot;topleft&quot;</span>)
 
 MapLocationsDF.Alarms &lt;-<span class="st"> </span>LocationsDF %&gt;%<span class="st"> </span><span class="kw">filter</span>(MinTravelExistingFireStations&lt;<span class="dv">500</span>)
