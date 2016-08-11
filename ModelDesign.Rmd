@@ -2,7 +2,7 @@
 title: "ModelDesign"
 author: "Dan Murphy"
 date: "August 10, 2016"
-output: html_document
+output: github_document
 ---
 
 ```{r, warning=FALSE, message = FALSE}
